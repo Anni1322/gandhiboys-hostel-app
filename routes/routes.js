@@ -1,10 +1,15 @@
 
+const core = require('cors')
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+const Student = require('../models/addstudent');
 const multer = require('multer');
 const fs = require('fs');
+const bodyParser = require('body-parser')
 
+router.use(bodyParser.json());
+router.use(core());
 
 // image upload
 
@@ -23,6 +28,34 @@ var upload = multer({
 
 
 
+
+// Routes
+router.post('/api/student', upload, async (req, res) => {
+    try {
+    //   const student = new Student(req.body);
+      const student = new Student(req.body);
+
+      await student.save();
+      res.status(201).json(student);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+  
+
+router.get('/adddd', async(req, res)=>{
+    try {
+        const student = await Student.find().exec();
+        // res.render('index', {
+        //     title: 'Home Page',
+        //     users: users,
+        // });
+        // console.log(users);
+         res.json(student);
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 // insert an user into database route 
 router.post('/add', upload, async (req, res) => {
@@ -47,31 +80,30 @@ router.post('/add', upload, async (req, res) => {
 
 
 
-//Get all users route
-// router.get("/", async (req, res) => {
-//     try {
-//         const users = await User.find().exec();
-//         res.json(users.recordset)
-//         res.render('index', {
-//             title: 'Home Page',
-//             users: users,
-//         });
-//         console.log(users);
-       
-//     } catch (err) {
-//         res.json({ message: err.message });
-//     }
-// });
-
+// Get all users route
 router.get("/", async (req, res) => {
     try {
         const users = await User.find().exec();
-        console.log(users);
-        res.json(users);
+        // res.render('index', {
+        //     title: 'Home Page',
+        //     users: users,
+        // });
+        // console.log(users);
+         res.json(users);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.json({ message: err.message });
     }
 });
+
+// router.get("/", async (req, res) => {
+//     try {
+//         const users = await User.find().exec();
+//         console.log(users);
+//         res.json(users);
+//     } catch (err) {
+//         res.status(500).json({ message: err.message });
+//     }
+// });
 
 // router.get("/", async (req, res) => {
 //     try {
@@ -100,11 +132,9 @@ router.get('/edit/:id', async (req, res) => {
     try {
         let id = req.params.id;
         const user = await User.findById(id).exec();
-
         if (!user) {
             return res.redirect('/');
         }
-
         res.render('edit_users.ejs', {
             title: "Edit User",
             user: user,
@@ -114,7 +144,6 @@ router.get('/edit/:id', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-
 
 
 // update user route
