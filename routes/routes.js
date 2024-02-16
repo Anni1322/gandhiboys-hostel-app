@@ -83,7 +83,7 @@ router.post('/add', upload, async (req, res) => {
 // Get all users route
 router.get("/", async (req, res) => {
     try {
-        const users = await User.find().exec();
+        const users = await Student.find().exec();
         // res.render('index', {
         //     title: 'Home Page',
         //     users: users,
