@@ -1,50 +1,31 @@
-// import 
-require ('dotenv').config();
+
+require('dotenv').config();
+const mongoose= require('mongoose');
 const express = require('express');
-const mongoose = require("mongoose");
-const session = require("express-session");
-const cors = require('cors');
-const path = require('path');
-
-
-
 const app = express();
-const PORT = process.env.PORT || 4000;
+const cors = require('cors');
 
 app.use(cors());
 
-//database connectio 
-mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true});
-const db = mongoose.connection;
-db.on("error",(error)=>console.log(error));
-db.once("open", ()=> console.log("connected to the database!"));
+ 
+const PORT = process.env.PORT || 4000;
 
-// milddlewares
-app.use(express.urlencoded({ extended: false }));
+mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log("Connected to the database!");
+  })
+  .catch((error) => {
+    console.error("Error connecting to the database:", error);
+  });
 
-app.use(session(
-    {
-        secret: 'my secret key',
-        saveUninitialized: false,
-        resave: true
-    }
-));
+// for user routes
+const userRoute = require('./routes/userRoute')
+app.use('/',userRoute);
 
-app.use((req, res, next)=>{
-    res.locals.message = req.session.message;
-    delete req.session.message;
-    next();
-});
+// for admin routes
+const adminRoute = require('./routes/adminRoute')
+app.use('/admin',adminRoute);
 
-
-app.use(express.static('public'));
-
-// set temlate engin
-app.set('view engine', 'ejs');
-
-// route prefix
-app.use("", require("./routes/routes"));
-
-app.listen(PORT,()=>{
-    console.log(`server started ${PORT}`);
-});
+app.listen(PORT,function () {
+    console.log("server is runnig......",PORT);
+})
