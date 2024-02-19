@@ -18,6 +18,8 @@ mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology
     console.error("Error connecting to the database:", error);
   });
 
+
+app.use(express.static('public'));
 // for user routes
 const userRoute = require('./routes/userRoute')
 app.use('/',userRoute);

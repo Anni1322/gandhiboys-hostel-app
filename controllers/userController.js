@@ -15,18 +15,6 @@ const randomstring = require('randomstring')
 const multer = require("multer");
 const path = require('path');
 
-user_route.use(express.static('upload'));
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null,path.join(__dirname, '../upload/userimages'))
-    },
-    filename:function (req, file, cb) {
-        const name = Date.now()+'-'+file.originalname;
-        cb(null,name);
-    }
-})
-const upload = multer({storage:storage});
 
 // s password 
 const securePassword = async(password)=>{
@@ -119,6 +107,7 @@ const loaduploadd = async(req, res)=>{
     }
 }
 
+
 const insertUser = async(req, res)=>{
     try{
         const spassword = await securePassword(req.body.password);
@@ -126,7 +115,7 @@ const insertUser = async(req, res)=>{
             name:req.body.name,
             email:req.body.email,
             mobile:req.body.mobile,
-            image:req.file.originalname,
+            image:req.file.filename,
             password:spassword,
             is_admin:0
         });
