@@ -26,17 +26,21 @@ user_route.use(bodyParser.urlencoded({extended:true}))
 const multer = require("multer");
 const path = require('path');
 
-user_route.use(express.static('public'));
+// user_route.use(express.static('public'));
+user_route.use(express.static(path.join(__dirname, 'public')));
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null,path.join(__dirname, '../public/userimages'))
+        // cb(null,path.join(__dirname, '../public/userimages'))
+        cb(null,'./public');
     },
     filename:function (req, file, cb) {
         const name = Date.now()+'-'+file.originalname;
         cb(null,name);
     }
 })
+
 const upload = multer({storage:storage});
 
 
@@ -48,6 +52,7 @@ const userController = require('../controllers/userController');
 
 
 user_route.get('/register',auth.isLogout,userController.loadRegister);
+user_route.get('/users',auth.isLogout,userController.loaduploadd);
 
 user_route.post('/register',upload.single('image'),userController.insertUser);
 user_route.post('/upload',upload.single('image'),userController.uploadd);

@@ -72,7 +72,6 @@ const sendvarifyMail = async(name, email, user_id)=>{
 
 // 
 const sendResetPasswordMail = async(name, email, token)=>{
-
     try{
         const transporter =  nodemailer.createTransport({
             host:'smtp.gmail.com',
@@ -112,7 +111,8 @@ const loadRegister = async(req, res)=>{
 }
 const loaduploadd = async(req, res)=>{
     try{
-        const userData = await Image.find(); 
+       const userData = await User.find();
+    //    res.render('login',{message:"Incorrect Email"}); 
        res.json(userData);
     }catch(error){
         console.log(error.message)
@@ -132,7 +132,7 @@ const insertUser = async(req, res)=>{
         });
         const userData = await user.save();
         if(userData){
-            sendvarifyMail(req.body.name, req.body.email, userData._id);
+            // sendvarifyMail(req.body.name, req.body.email, userData._id);
             res.json(userData);
             // res.render('registration',{message:'Your registration has been successflly, Please varify your email'})
         }else{
@@ -143,6 +143,7 @@ const insertUser = async(req, res)=>{
          console.log(error.message)
      }
 }
+
 const uploadd = async(req, res)=>{
     const imagePath = req.file.path;
 
@@ -393,5 +394,6 @@ module.exports ={
     sentverificationLink,
     editLoad,
     updateProfile,
-    uploadd
+    uploadd,
+    loaduploadd
 }
