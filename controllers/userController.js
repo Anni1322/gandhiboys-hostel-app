@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const Department = require('../models/department');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const express = require('express');
@@ -117,6 +118,15 @@ const insertUser = async(req, res)=>{
             mobile:req.body.mobile,
             image:req.file.filename,
             password:spassword,
+            room:req.body.room,
+            batch:req.body.batch,
+            age:req.body.age,
+            department:req.body.department,
+            position:req.body.position,
+            address:req.body.address,
+            qualification:req.body.qualification,
+            username:req.body.username,
+
             is_admin:0
         });
         const userData = await user.save();
@@ -132,6 +142,20 @@ const insertUser = async(req, res)=>{
          console.log(error.message)
      }
 }
+
+const loadAddDepartment = async(req, res)=>{
+    try {
+      const users = await Department.find().exec();
+    //   res.render("add_department", {
+    //     title: "department",
+    //     users: users,
+    //   });
+    res.json(users)
+    } catch (err) {
+      res.json({ message: err.message });
+    }
+  };
+  
 
 const uploadd = async(req, res)=>{
     const imagePath = req.file.path;
@@ -370,6 +394,7 @@ const updateProfile = async(req, res)=>{
 module.exports ={
     loadRegister,
     insertUser,
+    loadAddDepartment,
     verifymail,
     verifyLogin,
     loginload,

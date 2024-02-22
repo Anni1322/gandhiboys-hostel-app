@@ -64,7 +64,7 @@ var storage = multer.diskStorage({
 var upload = multer({
     storage: storage,
     limits: {
-        fileSize: 200 * 1024  
+        fileSize: 3 * 1024 * 1024 
     }
 }).single('image');
 
@@ -92,6 +92,10 @@ user_route.post('/login',userController.verifyLogin);
 
 // user_route.get('/home',auth.isLogin, userController.loadHome);
 user_route.get('/home', userController.loadHome);
+
+
+user_route.get('/department',userController.loadAddDepartment);
+// user_route.post('/add_department',adminController.adddepartment);
 
 user_route.get('/logout',auth.isLogin,userController.userlogout);
 

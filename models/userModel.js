@@ -18,6 +18,39 @@ const userSchema = mongoose.Schema({
         type:String,
         required:true
     },
+    department:{
+        type:String,
+        required:true
+    },
+    batch:{
+        type:Number,
+        required:true
+    },
+    age:{
+        type:Number,
+        required:true
+    },
+    room:{
+        type:Number,
+        required:true
+    },
+    position:{
+        type:String,
+        required:true
+    },
+    address:{
+        type:String,
+        required:true
+    },
+    qualification:{
+        type:String,
+        required:true
+    },
+    username:{
+        type:String,
+        required:true
+    },
+
     is_admin:{
         type:Number,
         required:true
